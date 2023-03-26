@@ -7,12 +7,12 @@
 
 typedef struct queue {
   struct queue *next;
-  char op;
+  Token op;
   double value;
 } queue;
 
-void add(queue **head, char op, double value, int *code);
-void get(queue **head, char *op, double *value, int *code);
+int add(queue **head, Token op, double value);
+int get(queue **head, Token *op, double *value);
 void free_queue(queue **head);
 
 #endif  // SMARTCALC_S21_STRUCTS_H

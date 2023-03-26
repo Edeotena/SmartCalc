@@ -1,10 +1,12 @@
+#include "s21_calculate.h"
 #include "s21_structs.h"
 
-void add(queue **head, char op, double value, int *code) {
+int add(queue **head, Token op, double value) {
+  int res = SUCCESS;
   if (*head == NULL) {
     *head = (queue *)calloc(1, sizeof(queue));
     if (*head == NULL) {
-      *code = ERROR;
+      res = FAILURE;
     } else {
       (*head)->op = op;
       (*head)->value = value;
@@ -17,23 +19,28 @@ void add(queue **head, char op, double value, int *code) {
     }
     temp->next = calloc(1, sizeof(queue));
     if (temp->next == NULL) {
-      *code = ERROR;
+      res = FAILURE;
     } else {
       temp->next->op = op;
       temp->next->value = value;
       temp->next->next = NULL;
     }
   }
+
+  return res;
 }
 
-void get(queue **head, char *op, double *value, int *code) {
+int get(queue **head, Token *op, double *value) {
+  int res = SUCCESS;
   if (*head != NULL) {
     *op = (*head)->op;
     *value = (*head)->value;
     (*head) = (*head)->next;
   } else {
-    *code = STOP_QUEUE;
+    res = FAILURE;
   }
+
+  return res;
 }
 
 void free_queue(queue **head) {

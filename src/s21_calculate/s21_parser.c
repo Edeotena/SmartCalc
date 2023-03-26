@@ -1,81 +1,126 @@
 #include "s21_calculate.h"
+#include "s21_structs.h"
 
-char get_lex(const char *str, size_t *i) {
-  char res = 0;
-  size_t size = strlen(str);
-  if (str[0] == 'x') {
-    res = 'x';
-  } else if (str[0] == '+') {
-    res = '+';
-  } else if (str[0] == '-') {
-    res = '-';
-  } else if (str[0] == '*') {
-    res = '*';
-  } else if (str[0] == '/') {
-    res = '/';
-  } else if (str[0] == '(') {
-    res = '(';
-  } else if (str[0] == ')') {
-    res = ')';
-  } else if (str[0] == '^') {
-    res = '^';
-  } else if (size >= 2 && str[0] == 's' && str[1] == 'i' && str[2] == 'n') {
-    res = 's';
-    (*i) += 2;
-  } else if (size >= 2 && str[0] == 'c' && str[1] == 'o' && str[2] == 's') {
-    res = 'c';
-    (*i) += 2;
-  } else if (size >= 2 && str[0] == 't' && str[1] == 'a' && str[2] == 'n') {
-    res = 't';
-    (*i) += 2;
-  } else if (size >= 2 && str[0] == 'c' && str[1] == 't' && str[2] == 'g') {
-    res = 'g';
-    (*i) += 2;
-  } else if (size >= 3 && str[0] == 's' && str[1] == 'q' && str[2] == 'r' &&
-             str[3] == 't') {
-    res = 'q';
-    (*i) += 3;
-  } else if (size >= 1 && str[0] == 'l' && str[1] == 'n') {
-    res = 'l';
-    (*i) += 1;
+void skip_spaces(const char** str) {
+  while (**str == ' ') {
+    ++(*str);
   }
+}
+
+int is_lex(const char* str, const char* token, size_t* shift) {
+  int code = SUCCESS;
+  const char* start = token;
+
+  for (; *str != '\0' && *str == *token; ++str, ++token)
+    ;
+
+  if (*token != '\0') {
+    code = FAILURE;
+    *shift += token - start;
+  }
+
+  return code;
+}
+
+Token get_lex(const char* str, size_t* shift) {
+  Token res = UNRECOGNIZED;
+
+  if (is_lex(str, "(", shift) == SUCCESS) {
+    res = OPENING_BRACKET;
+  } else if (is_lex(str, ")", shift) == SUCCESS) {
+    res = CLOSING_BRACKET;
+  } else if (is_lex(str, "+", shift) == SUCCESS) {
+    res = ADDITION;
+  } else if (is_lex(str, "-", shift) == SUCCESS) {
+    res = SUBTRACTION;
+  } else if (is_lex(str, "*", shift) == SUCCESS) {
+    res = MULTIPLICATION;
+  } else if (is_lex(str, "/", shift) == SUCCESS) {
+    res = DIVISION;
+  } else if (is_lex(str, "^", shift) == SUCCESS) {
+    res = POWER;
+  } else if (is_lex(str, "mod", shift) == SUCCESS) {
+    res = MODULUS;
+  } else if (is_lex(str, "cos", shift) == SUCCESS) {
+    res = COS;
+  } else if (is_lex(str, "sin", shift) == SUCCESS) {
+    res = SIN;
+  } else if (is_lex(str, "tan", shift) == SUCCESS) {
+    res = TAN;
+  } else if (is_lex(str, "acos", shift) == SUCCESS) {
+    res = ACOS;
+  } else if (is_lex(str, "asin", shift) == SUCCESS) {
+    res = ASIN;
+  } else if (is_lex(str, "atan", shift) == SUCCESS) {
+    res = ATAN;
+  } else if (is_lex(str, "sqrt", shift) == SUCCESS) {
+    res = SQRT;
+  } else if (is_lex(str, "ln", shift) == SUCCESS) {
+    res = LN;
+  } else if (is_lex(str, "log", shift) == SUCCESS) {
+    res = LOG;
+  } else if (is_lex(str, "x", shift) == SUCCESS) {
+    res = X;
+  }
+
   return res;
 }
 
-queue *parse_to_lex(char *str) {
-  queue *res = NULL;
-  size_t size = strlen(str);
-  int code = 0;
+// TODO: return error code
+int parse_to_lex(const char* str, queue* res) {
+  res = NULL;
+  int code = SUCCESS;
 
-  if (str[size - 1] == '\n') {
-    str[size - 1] = '\0';
-    --size;
-  }
+  const char* str_cp = str;
+  Token previous = UNRECOGNIZED;
 
-  char last_sym = 0;
-  for (size_t i = 0; i < size && code == 0; ++i) {
-    if (str[i] != ' ') {
-      char lex = get_lex(str + i, &i);
-      if (lex != 0) {
-        if ((lex == '-' && last_sym == '(') || (lex == '-' && i == 0)) {
-          add(&res, '~', 0, &code);
-        } else {
-          last_sym = lex;
-          add(&res, lex, 0, &code);
-        }
+  for (; *str_cp != '\0' && code == SUCCESS;) {
+    skip_spaces(&str_cp);
+    size_t shift = 0;
+    Token next = get_lex(str_cp, &shift);
+    if (next != UNRECOGNIZED) {
+      if ((next == SUBTRACTION || next == ADDITION) &&
+          (previous == OPENING_BRACKET || str == str_cp)) {
+        code = add(&res, next == SUBTRACTION ? UNARY_MINUS : UNARY_PLUS, 0);
       } else {
-        double num = get_num(str + i, &code, &i);
-        if (code != ERROR) {
-          add(&res, 0, num, &code);
-          last_sym = 0;
-        }
+        code = add(&res, next, 0);
       }
+      previous = next;
+    } else {
+      // TODO: handle values
     }
+
+    skip_spaces(&str_cp);
   }
 
-  if (code == ERROR) {
+  if (code != SUCCESS) {
     free_queue(&res);
   }
 
-  return res;
+  /*  char last_sym = 0;
+    for (size_t i = 0; i < size && code == 0; ++i) {
+      if (str[i] != ' ') {
+        char lex = get_lex(str + i, &i);
+        if (lex != 0) {
+          if ((lex == '-' && last_sym == '(') || (lex == '-' && i == 0)) {
+            add(&res, '~', 0, &code);
+          } else {
+            last_sym = lex;
+            add(&res, lex, 0, &code);
+          }
+        } else {
+          double num = get_num(str + i, &code, &i);
+          if (code != ERROR) {
+            add(&res, 0, num, &code);
+            last_sym = 0;
+          }
+        }
+      }
+    }
+
+    if (code == ERROR) {
+      free_queue(&res);
+    }*/
+
+  return code;
 }

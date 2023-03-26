@@ -1,5 +1,10 @@
+#include <stdlib.h>
+
 #ifndef SMARTCALC_S21_CALCULATE_H
 #define SMARTCALC_S21_CALCULATE_H
+
+#define SUCCESS 1
+#define FAILURE 0
 
 typedef enum {
   OPENING_BRACKET,
@@ -12,7 +17,7 @@ typedef enum {
   MODULUS,
   UNARY_PLUS,
   UNARY_MINUS,
-  CON,
+  COS,
   SIN,
   TAN,
   ACOS,
@@ -20,7 +25,10 @@ typedef enum {
   ATAN,
   SQRT,
   LN,
-  LOG
+  LOG,
+  UNRECOGNIZED,
+  X,
+  VALUE
 } Token;
 
 #endif  // SMARTCALC_S21_CALCULATE_H

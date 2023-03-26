@@ -66,7 +66,6 @@ Token get_lex(const char* str, size_t* shift) {
   return res;
 }
 
-// TODO: return error code
 int parse_to_lex(const char* str, queue* res) {
   res = NULL;
   int code = SUCCESS;
@@ -87,8 +86,17 @@ int parse_to_lex(const char* str, queue* res) {
       }
       previous = next;
     } else {
-      // TODO: handle values
+      char* value_end;
+      double value = strtod(str_cp, &value_end);
+      if (str_cp == value_end) {
+        code = FAILURE;
+      } else {
+        shift = value_end - str_cp;
+        previous = UNRECOGNIZED;
+        code = add(&res, VALUE, value);
+      }
     }
+    str_cp += shift;
 
     skip_spaces(&str_cp);
   }
@@ -96,31 +104,6 @@ int parse_to_lex(const char* str, queue* res) {
   if (code != SUCCESS) {
     free_queue(&res);
   }
-
-  /*  char last_sym = 0;
-    for (size_t i = 0; i < size && code == 0; ++i) {
-      if (str[i] != ' ') {
-        char lex = get_lex(str + i, &i);
-        if (lex != 0) {
-          if ((lex == '-' && last_sym == '(') || (lex == '-' && i == 0)) {
-            add(&res, '~', 0, &code);
-          } else {
-            last_sym = lex;
-            add(&res, lex, 0, &code);
-          }
-        } else {
-          double num = get_num(str + i, &code, &i);
-          if (code != ERROR) {
-            add(&res, 0, num, &code);
-            last_sym = 0;
-          }
-        }
-      }
-    }
-
-    if (code == ERROR) {
-      free_queue(&res);
-    }*/
 
   return code;
 }

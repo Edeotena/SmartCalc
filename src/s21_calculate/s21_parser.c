@@ -7,17 +7,18 @@ void skip_spaces(const char** str) {
   }
 }
 
-int is_lex(const char* str, const char* token, size_t* shift) {
+int is_lex(const char* str, const char* lex, size_t* shift) {
   int code = SUCCESS;
-  const char* start = token;
+  const char* start = lex;
 
-  for (; *str != '\0' && *str == *token; ++str, ++token)
+  for (; *str != '\0' && *str == *lex; ++str, ++lex)
     ;
 
-  if (*token != '\0') {
+  if (*lex != '\0') {
     code = FAILURE;
-    *shift += token - start;
   }
+
+  *shift = lex - start;
 
   return code;
 }
@@ -66,23 +67,22 @@ Token get_lex(const char* str, size_t* shift) {
   return res;
 }
 
-int parse_to_lex(const char* str, queue* res) {
-  res = NULL;
+int parse_to_tokens(const char* str, queue** res) {
+  *res = NULL;
   int code = SUCCESS;
 
-  const char* str_cp = str;
   Token previous = UNRECOGNIZED;
 
-  for (; *str_cp != '\0' && code == SUCCESS;) {
+  for (const char* str_cp = str; *str_cp != '\0' && code == SUCCESS;) {
     skip_spaces(&str_cp);
     size_t shift = 0;
     Token next = get_lex(str_cp, &shift);
     if (next != UNRECOGNIZED) {
       if ((next == SUBTRACTION || next == ADDITION) &&
           (previous == OPENING_BRACKET || str == str_cp)) {
-        code = add(&res, next == SUBTRACTION ? UNARY_MINUS : UNARY_PLUS, 0);
+        code = add(res, next == SUBTRACTION ? UNARY_MINUS : UNARY_PLUS, 0);
       } else {
-        code = add(&res, next, 0);
+        code = add(res, next, 0);
       }
       previous = next;
     } else {
@@ -93,16 +93,18 @@ int parse_to_lex(const char* str, queue* res) {
       } else {
         shift = value_end - str_cp;
         previous = UNRECOGNIZED;
-        code = add(&res, VALUE, value);
+        code = add(res, VALUE, value);
       }
     }
-    str_cp += shift;
 
-    skip_spaces(&str_cp);
+    if (code == SUCCESS) {
+      str_cp += shift;
+      skip_spaces(&str_cp);
+    }
   }
 
   if (code != SUCCESS) {
-    free_queue(&res);
+    free_queue(res);
   }
 
   return code;

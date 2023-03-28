@@ -1,9 +1,30 @@
-//
-// Created by edeotena on 27.03.23.
-//
-
 #ifndef SMARTCALC_S21_STRUCTS_H
 #define SMARTCALC_S21_STRUCTS_H
+
+typedef enum {
+  OPENING_BRACKET,
+  CLOSING_BRACKET,
+  ADDITION,
+  SUBTRACTION,
+  MULTIPLICATION,
+  DIVISION,
+  POWER,
+  MODULUS,
+  UNARY_PLUS,
+  UNARY_MINUS,
+  COS,
+  SIN,
+  TAN,
+  ACOS,
+  ASIN,
+  ATAN,
+  SQRT,
+  LN,
+  LOG,
+  UNRECOGNIZED,
+  X,
+  VALUE
+} Token;
 
 typedef struct queue {
   struct queue *next;

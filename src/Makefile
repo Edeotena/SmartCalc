@@ -8,13 +8,15 @@ BUILD_FLAGS = -Wall -Wextra -Werror -std=c11 -pedantic #-fanalyzer
 VALGRIND_FLAGS = --log-file="$(VALGRIND_OUTPUT)" --track-origins=yes --trace-children=yes --leak-check=full --leak-resolution=med
 LIBS_FLAGS = -lcheck
 
-SRC_C_FILES = lib/*.c
+SRC_C_FILES = s21*/*.c
 TEST_C_FILES = tests/*.c
 
 TEST_TARGET  = s21_test
 MAIN_TARGET = s21_main
 
 REPORT_DIR = report
+
+INCLUDES = s21_structs/ s21_calculate/ tests/ .
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
@@ -34,7 +36,7 @@ apply_clang:
 	rm -f .clang-format
 
 test: apply_clang $(SRC_C_FILES)
-	$(CC) $(BUILD_FLAGS) $(SRC_C_FILES) $(TEST_C_FILES) -o $(TEST_TARGET) $(LIBS_FLAGS)
+	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES))	 $(SRC_C_FILES) $(TEST_C_FILES) -o $(TEST_TARGET) $(LIBS_FLAGS)
 	./$(TEST_TARGET)
 
 build_test: apply_clang $(SRC_C_FILES)

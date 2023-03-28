@@ -32,8 +32,18 @@ typedef struct queue {
   double value;
 } queue;
 
+typedef struct stack {
+  struct stack *next;
+  Token op;
+  double val;
+} stack;
+
 int add(queue **head, Token op, double value);
 int get(queue **head, Token *op, double *value);
 void free_queue(queue **head);
+
+int pop(stack **head, Token *res);
+int push(stack **head, Token tk);
+void free_stack(stack **head);
 
 #endif  // SMARTCALC_S21_STRUCTS_H

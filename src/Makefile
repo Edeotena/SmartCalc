@@ -16,7 +16,7 @@ MAIN_TARGET = s21_main
 
 REPORT_DIR = report
 
-INCLUDES = s21_structs/ s21_calculate/ tests/ .
+INCLUDES = .
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)

@@ -1,4 +1,4 @@
-#include "s21_tests.h"
+#include "tests/s21_tests.h"
 
 START_TEST(parser_1) {
   int size = 7;

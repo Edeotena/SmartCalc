@@ -1,4 +1,4 @@
-#include "s21_tests.h"
+#include "tests/s21_tests.h"
 
 int main() {
   Suite* suites[] = {

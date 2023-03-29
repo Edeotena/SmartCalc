@@ -68,8 +68,8 @@ int produce_bin(stack **func, double fir, double sec, Token op) {
 }
 
 double calculate(queue *func, double x, int *code_error) {
-  int code = 0;
-  *code_error = 0;
+  int code = SUCCESS;
+  *code_error = SUCCESS;
   double value;
   Token op;
   stack *temp = NULL;
@@ -90,7 +90,7 @@ double calculate(queue *func, double x, int *code_error) {
       } else {
         code = FAILURE;
       }
-      if (code == 0 && temp != NULL) {
+      if (code == FAILURE && temp != NULL) {
         double sec;
         code = pop(&temp, &remove, &sec);
         if (code == SUCCESS) {

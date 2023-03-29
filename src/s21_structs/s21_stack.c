@@ -8,9 +8,6 @@ int pop(stack **head, Token *res, double *val) {
     *val = (*head)->val;
     stack *temp = *head;
     *head = (*head)->next;
-    if (*head == NULL) {
-      code = FAILURE;
-    }
     free(temp);
   } else {
     code = FAILURE;

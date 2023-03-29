@@ -209,6 +209,82 @@ START_TEST(rpn_calc_11) {
 }
 END_TEST
 
+START_TEST(rpn_calc_12) {
+  queue *res;
+  char *str = "5 ^ 6";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, pow(5, 6), EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
+START_TEST(rpn_calc_13) {
+  queue *res;
+  char *str = "-3 + (-(3-5)) / 2";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, -3 + (-(3 - 5)) / 2, EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
+START_TEST(rpn_calc_14) {
+  queue *res;
+  char *str = "sin(acos(1/2))";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, sin(acos(1. / 2)), EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
+START_TEST(rpn_calc_15) {
+  queue *res;
+  char *str = "log(100)/log(10)";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, log(100) / log(10), EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
 START_TEST(wr_rpn_calc_1) {
   queue *res;
   char *str = "3 + 5 5";
@@ -259,7 +335,7 @@ END_TEST
 
 Suite *rpn_calc_suite() {
   Suite *suite = suite_create("prn_calc_suite");
-  TCase *tcase = tcase_create("prn_calc_suite");
+  TCase *tcase = tcase_create("prn_calc_case");
 
   tcase_add_test(tcase, rpn_calc_1);
   tcase_add_test(tcase, rpn_calc_2);
@@ -272,6 +348,10 @@ Suite *rpn_calc_suite() {
   tcase_add_test(tcase, rpn_calc_9);
   tcase_add_test(tcase, rpn_calc_10);
   tcase_add_test(tcase, rpn_calc_11);
+  tcase_add_test(tcase, rpn_calc_12);
+  tcase_add_test(tcase, rpn_calc_13);
+  tcase_add_test(tcase, rpn_calc_14);
+  tcase_add_test(tcase, rpn_calc_15);
 
   tcase_add_test(tcase, wr_rpn_calc_1);
   tcase_add_test(tcase, wr_rpn_calc_2);

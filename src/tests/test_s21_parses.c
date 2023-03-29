@@ -81,7 +81,7 @@ END_TEST
 
 Suite *parser_suite() {
   Suite *suite = suite_create("parser_suite");
-  TCase *tcase = tcase_create("parser_suite");
+  TCase *tcase = tcase_create("parser_case");
 
   tcase_add_test(tcase, parser_1);
   tcase_add_test(tcase, parser_2);

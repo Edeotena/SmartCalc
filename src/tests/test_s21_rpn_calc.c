@@ -7,7 +7,7 @@ START_TEST(rpn_calc_1) {
 
   ck_assert_int_eq(code, SUCCESS);
   queue *rpn;
-  rpn = make_rpn(res);
+  rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
   double dres = calculate(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
@@ -25,7 +25,7 @@ START_TEST(rpn_calc_2) {
 
   ck_assert_int_eq(code, SUCCESS);
   queue *rpn;
-  rpn = make_rpn(res);
+  rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
   double dres = calculate(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
@@ -43,12 +43,64 @@ START_TEST(rpn_calc_3) {
 
   ck_assert_int_eq(code, SUCCESS);
   queue *rpn;
-  rpn = make_rpn(res);
+  rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
   double dres = calculate(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, 1, EPS);
+
+  free_queue(&res);
+}
+END_TEST
+
+START_TEST(rpn_calc_4) {
+  queue *res;
+  char *str = "sin(asin(sin(asin(sin(asin(sin(asin(1))))))))";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, 1, EPS);
+
+  free_queue(&res);
+}
+END_TEST
+
+START_TEST(rpn_calc_5) {
+  queue *res;
+  char *str = "log(10 ^ 7)      ";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, 7, EPS);
+
+  free_queue(&res);
+}
+END_TEST
+
+START_TEST(wr_rpn_calc_1) {
+  queue *res;
+  char *str = "3 + 5 5";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, FAILURE);
 
   free_queue(&res);
 }
@@ -61,6 +113,9 @@ Suite *rpn_calc_suite() {
   tcase_add_test(tcase, rpn_calc_1);
   tcase_add_test(tcase, rpn_calc_2);
   tcase_add_test(tcase, rpn_calc_3);
+  tcase_add_test(tcase, rpn_calc_4);
+  tcase_add_test(tcase, rpn_calc_5);
+  tcase_add_test(tcase, wr_rpn_calc_1);
 
   suite_add_tcase(suite, tcase);
   return suite;

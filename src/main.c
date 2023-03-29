@@ -6,11 +6,11 @@
 
 int main() {
   queue *res;
-  char *str = "sin(asin(1))";
+  char *str = "log(10 ^ 7)      ";
   int code = parse_to_tokens(str, &res);
 
   queue *rpn;
-  rpn = make_rpn(res);
+  rpn = make_rpn(res, &code);
   double dres = calculate(rpn, 0, &code);
 
   free_queue(&res);

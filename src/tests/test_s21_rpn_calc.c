@@ -15,6 +15,7 @@ START_TEST(rpn_calc_1) {
   ck_assert_double_eq_tol(dres, 11, EPS);
 
   free_queue(&res);
+  free_queue(&rpn);
 }
 END_TEST
 
@@ -33,6 +34,7 @@ START_TEST(rpn_calc_2) {
   ck_assert_double_eq_tol(dres, 12.5, EPS);
 
   free_queue(&res);
+  free_queue(&rpn);
 }
 END_TEST
 
@@ -48,9 +50,10 @@ START_TEST(rpn_calc_3) {
   double dres = calculate(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
-  ck_assert_double_eq_tol(dres, 1, EPS);
+  ck_assert_double_eq_tol(dres, sin(asin(1)), EPS);
 
   free_queue(&res);
+  free_queue(&rpn);
 }
 END_TEST
 
@@ -69,6 +72,7 @@ START_TEST(rpn_calc_4) {
   ck_assert_double_eq_tol(dres, 1, EPS);
 
   free_queue(&res);
+  free_queue(&rpn);
 }
 END_TEST
 
@@ -84,9 +88,29 @@ START_TEST(rpn_calc_5) {
   double dres = calculate(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
-  ck_assert_double_eq_tol(dres, 7, EPS);
+  ck_assert_double_eq_tol(dres, log10(pow(10, 7)), EPS);
 
   free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
+START_TEST(rpn_calc_6) {
+  queue *res;
+  char *str = "cos(5)";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, cos(5), EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
 }
 END_TEST
 
@@ -115,6 +139,8 @@ Suite *rpn_calc_suite() {
   tcase_add_test(tcase, rpn_calc_3);
   tcase_add_test(tcase, rpn_calc_4);
   tcase_add_test(tcase, rpn_calc_5);
+  tcase_add_test(tcase, rpn_calc_6);
+
   tcase_add_test(tcase, wr_rpn_calc_1);
 
   suite_add_tcase(suite, tcase);

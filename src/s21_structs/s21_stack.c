@@ -1,10 +1,11 @@
 #include "s21_smart_calc.h"
 #include "s21_structs/s21_structs.h"
 
-int pop(stack **head, Token *res) {
+int pop(stack **head, Token *res, double *val) {
   int code = SUCCESS;
   if (head != NULL) {
     *res = (*head)->op;
+    *val = (*head)->val;
     stack *temp = *head;
     *head = (*head)->next;
     if (*head == NULL) {
@@ -18,12 +19,13 @@ int pop(stack **head, Token *res) {
   return code;
 }
 
-int push(stack **head, Token tk) {
+int push(stack **head, Token tk, double value) {
   int code = SUCCESS;
   if (*head == NULL) {
     *head = (stack *)calloc(1, sizeof(stack));
     if (*head != NULL) {
       (*head)->op = tk;
+      (*head)->val = value;
       (*head)->next = NULL;
     } else {
       code = FAILURE;
@@ -33,6 +35,7 @@ int push(stack **head, Token tk) {
     if (next != NULL) {
       next->next = (*head);
       next->op = tk;
+      next->val = value;
       (*head) = next;
     } else {
       code = FAILURE;

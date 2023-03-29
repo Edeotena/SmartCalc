@@ -37,7 +37,7 @@ int get(queue **head, Token *op, double *value) {
     *value = (*head)->value;
     (*head) = (*head)->next;
   } else {
-    res = FAILURE;
+    res = STOP_QUEUE;
   }
 
   return res;

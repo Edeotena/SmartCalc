@@ -19,8 +19,10 @@ int produce_un(stack **func, double x, Token op) {
     code = push(func, VALUE, cos(x) / sin(x));
   } else if (op == SQRT) {
     code = push(func, VALUE, sqrt(x));
-  } else if (op == LOG || op == LN) {
+  } else if (op == LN) {
     code = push(func, VALUE, log(x));
+  } else if (op == LOG) {
+    code = push(func, VALUE, log10(x));
   } else if (op == UNARY_MINUS) {
     code = push(func, VALUE, -x);
   } else if (op == UNARY_PLUS) {

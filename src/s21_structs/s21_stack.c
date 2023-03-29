@@ -3,7 +3,7 @@
 
 int pop(stack **head, Token *res, double *val) {
   int code = SUCCESS;
-  if (head != NULL) {
+  if (*head != NULL) {
     *res = (*head)->op;
     *val = (*head)->val;
     stack *temp = *head;

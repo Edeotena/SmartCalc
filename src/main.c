@@ -6,7 +6,7 @@
 
 int main() {
   queue *res;
-  char *str = "5 + 6";
+  char *str = "sin(asin(1))";
   int code = parse_to_tokens(str, &res);
 
   queue *rpn;

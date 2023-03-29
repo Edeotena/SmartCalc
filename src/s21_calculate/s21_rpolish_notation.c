@@ -48,7 +48,8 @@ int handle_bracket(queue **res, stack **operations, int *operands) {
   while (*operations != NULL && (*operations)->op != OPENING_BRACKET &&
          code != STOP_QUEUE) {
     Token p;
-    code = pop(operations, &p, 0);
+    double temp;
+    code = pop(operations, &p, &temp);
     if (code == SUCCESS) {
       if (p == '+' || p == '-' || p == '*' || p == '/' || p == '^') {
         --(*operands);

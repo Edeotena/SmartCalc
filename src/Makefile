@@ -1,7 +1,6 @@
 CC = gcc
 DELETE = rm -rf
 
-LIB = s21_matrix.a
 VALGRIND_OUTPUT = valgrind.txt
 
 BUILD_FLAGS = -Wall -Wextra -Werror -std=c11 -pedantic -fanalyzer
@@ -53,12 +52,6 @@ gcov_report: apply_clang
 	genhtml -o report $(TEST_TARGET).info
 	rm *.gcda *.gcno *.info
 	open report/index.html
-
-$(LIB): apply_clang
-	$(CC) -c $(addprefix -I , $(INCLUDES)) $(SRC_C_FILES) $(LIBS_FLAGS)
-	ar rcv $(LIB) *.o
-	ranlib $(LIB)
-	rm *.o
 
 cppcheck:
 	cppcheck --enable=all --suppress=missingIncludeSystem .

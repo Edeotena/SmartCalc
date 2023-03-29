@@ -32,30 +32,6 @@ int produce_un(stack **func, double x, Token op) {
   return code;
 }
 
-// TODO: optimize
-double double_mod(double a, double b) {
-  double mod;
-  if (a < 0) {
-    mod = -a;
-  } else {
-    mod = a;
-  }
-
-  if (b < 0) {
-    b = -b;
-  }
-
-  while (mod >= b) {
-    mod = mod - b;
-  }
-
-  if (a < 0) {
-    mod = -mod;
-  }
-
-  return mod;
-}
-
 int produce_bin(stack **func, double fir, double sec, Token op) {
   int code = FAILURE;
   if (op == SUBTRACTION) {
@@ -67,7 +43,7 @@ int produce_bin(stack **func, double fir, double sec, Token op) {
   } else if (op == DIVISION) {
     code = push(func, VALUE, sec / fir);
   } else if (op == MODULUS) {
-    code = push(func, VALUE, double_mod(sec, fir));
+    code = push(func, VALUE, fmod(sec, fir));
   } else if (op == POWER) {
     double real_pow = pow(sec, fir);
     if (sec < 0 && fir < 0) {

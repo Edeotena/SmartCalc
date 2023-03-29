@@ -14,6 +14,6 @@ add_executable(SmartCalc
         src/main.c
         src/s21_structs/s21_stack.c
         src/s21_calculate/s21_rpolish_notation.c
-        src/s21_calculate/s21_rpn_calc.c)
+        src/s21_calculate/s21_rpn_calc.c src/s21_calculate/s21_draw.c)
 
 target_link_libraries(SmartCalc m)

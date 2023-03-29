@@ -32,17 +32,26 @@ int produce_un(stack **func, double x, Token op) {
   return code;
 }
 
+// TODO: optimize
 double double_mod(double a, double b) {
   double mod;
-  if (a < 0)
+  if (a < 0) {
     mod = -a;
-  else
+  } else {
     mod = a;
-  if (b < 0) b = -b;
+  }
 
-  while (mod >= b) mod = mod - b;
+  if (b < 0) {
+    b = -b;
+  }
 
-  if (a < 0) return -mod;
+  while (mod >= b) {
+    mod = mod - b;
+  }
+
+  if (a < 0) {
+    mod = -mod;
+  }
 
   return mod;
 }

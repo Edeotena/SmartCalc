@@ -114,9 +114,136 @@ START_TEST(rpn_calc_6) {
 }
 END_TEST
 
+START_TEST(rpn_calc_7) {
+  queue *res;
+  char *str = "-3 * (+5)";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, -3 * (+5), EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
+START_TEST(rpn_calc_8) {
+  queue *res;
+  char *str = "1 + 2 - 3 * 4 / 5 ^ 6";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, 1 + 2 - 3 * 4 / pow(5, 6), EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
+START_TEST(rpn_calc_9) {
+  queue *res;
+  char *str = ".5";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, .5, EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
+START_TEST(rpn_calc_10) {
+  queue *res;
+  char *str = "5 mod 2";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, 5 % 2, EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
+START_TEST(rpn_calc_11) {
+  queue *res;
+  char *str = "tan(sqrt(3) / 2)";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  double dres = calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, SUCCESS);
+
+  ck_assert_double_eq_tol(dres, tan(sqrt(3) / 2), EPS);
+
+  free_queue(&res);
+  free_queue(&rpn);
+}
+END_TEST
+
 START_TEST(wr_rpn_calc_1) {
   queue *res;
   char *str = "3 + 5 5";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, FAILURE);
+
+  free_queue(&res);
+}
+END_TEST
+
+START_TEST(wr_rpn_calc_2) {
+  queue *res;
+  char *str = "sin (3.4.2)";
+  int code = parse_to_tokens(str, &res);
+
+  ck_assert_int_eq(code, SUCCESS);
+  queue *rpn;
+  rpn = make_rpn(res, &code);
+  ck_assert_int_eq(code, SUCCESS);
+  calculate(rpn, 0, &code);
+  ck_assert_int_eq(code, FAILURE);
+
+  free_queue(&res);
+}
+END_TEST
+
+START_TEST(wr_rpn_calc_3) {
+  queue *res;
+  char *str = ".5 ** 4";
   int code = parse_to_tokens(str, &res);
 
   ck_assert_int_eq(code, SUCCESS);
@@ -140,8 +267,15 @@ Suite *rpn_calc_suite() {
   tcase_add_test(tcase, rpn_calc_4);
   tcase_add_test(tcase, rpn_calc_5);
   tcase_add_test(tcase, rpn_calc_6);
+  tcase_add_test(tcase, rpn_calc_7);
+  tcase_add_test(tcase, rpn_calc_8);
+  tcase_add_test(tcase, rpn_calc_9);
+  tcase_add_test(tcase, rpn_calc_10);
+  tcase_add_test(tcase, rpn_calc_11);
 
   tcase_add_test(tcase, wr_rpn_calc_1);
+  tcase_add_test(tcase, wr_rpn_calc_2);
+  tcase_add_test(tcase, wr_rpn_calc_3);
 
   suite_add_tcase(suite, tcase);
   return suite;

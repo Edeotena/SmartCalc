@@ -6,7 +6,7 @@
 
 int main() {
   queue *res;
-  char *str = "log(10 ^ 7)      ";
+  char *str = "acos(tan(atan(sqtr(ln(1)))))";
   int code = parse_to_tokens(str, &res);
 
   queue *rpn;

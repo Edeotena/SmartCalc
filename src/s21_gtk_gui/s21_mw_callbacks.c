@@ -16,24 +16,46 @@ int check_for_x(queue *tokens) {
   return res;
 }
 
-void do_calculate(GtkWidget *window, struct multi_arg_t *data) {
+int get_double_from_entry(GtkWidget *entry, double *res) {
+  int valid = SUCCESS;
+  char *val_str = (char *)gtk_entry_get_text(GTK_ENTRY(entry));
+  if (*val_str != '\0') {
+    char *end;
+    *res = strtod(val_str, &end);
+    if (*end != '\0') {
+      valid = FAILURE;
+    }
+  } else {
+    valid = FAILURE;
+  }
+
+  return valid;
+}
+
+int get_int_from_entry(GtkWidget *entry, long *res) {
+  int valid = SUCCESS;
+  char *val_str = (char *)gtk_entry_get_text(GTK_ENTRY(entry));
+  if (*val_str != '\0') {
+    char *end;
+    *res = strtol(val_str, &end, 10);
+    if (*end != '\0') {
+      valid = FAILURE;
+    }
+  } else {
+    valid = FAILURE;
+  }
+
+  return valid;
+}
+
+void do_calculate(GtkWidget *window, struct widgets_container *data) {
   if (window == NULL) {
     return;
   }
   char buffer[255] = "Strange error";
 
   double x = 0;
-  char *end;
-  int valid_x = SUCCESS;
-  char *x_str = (char *)gtk_entry_get_text(GTK_ENTRY(data->x_field));
-  if (*x_str != '\0') {
-    x = strtod(x_str, &end);
-    if (*end != '\0') {
-      valid_x = FAILURE;
-    }
-  } else {
-    valid_x = FAILURE;
-  }
+  int valid_x = get_double_from_entry(data->calc_field, &x);
 
   queue *parsed;
   int code = parse_to_tokens(
@@ -66,4 +88,25 @@ void do_calculate(GtkWidget *window, struct multi_arg_t *data) {
   }
 
   gtk_label_set_text(GTK_LABEL(data->result), buffer);
+}
+
+void do_build(GtkWidget *window, struct widgets_container *data) {
+  if (window == NULL) {
+    return;
+  }
+
+  long steps = 0;
+  int valid_steps = get_int_from_entry(data->steps_field, &steps);
+  double start = 0, end = 0;
+  int valid_start = get_double_from_entry(data->st_field, &start);
+  int valid_end = get_double_from_entry(data->end_field, &end);
+
+  int code = SUCCESS;
+
+  if (valid_steps == FAILURE || valid_start == FAILURE ||
+      valid_end == FAILURE || end <= start || steps < 2) {
+    code = FAILURE;
+  } else {
+    code = SUCCESS;
+  }
 }

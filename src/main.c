@@ -2,18 +2,21 @@
 
 int main(int argc, char **argv) {
   GtkWidget *main_window, *grid, *calc_btn, *calc_field, *result, *x_field,
-      *st_field, *end_field, *step_field;
+      *st_field, *end_field, *steps_field, *build_button;
   gtk_init(&argc, &argv);
 
   main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
   set_mw_markdown(&main_window, &grid, &calc_field, &result, &calc_btn,
-                  &x_field, &st_field, &end_field, &step_field);
-  struct multi_arg_t data;
+                  &x_field, &st_field, &end_field, &steps_field, &build_button);
+  struct widgets_container data;
   data.calc_field = calc_field;
   data.result = result;
   data.x_field = x_field;
-  set_mw_signals(&main_window, &calc_btn, &data);
+  data.end_field = end_field;
+  data.st_field = st_field;
+  data.steps_field = steps_field;
+  set_mw_signals(&main_window, &calc_btn, &build_button, &data);
 
   gtk_widget_show_all(main_window);
   gtk_main();

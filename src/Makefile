@@ -9,7 +9,8 @@ GTK_LIBS = `pkg-config gtk+-3.0 --libs`
 VALGRIND_FLAGS = --log-file="$(VALGRIND_OUTPUT)" --track-origins=yes --trace-children=yes --leak-check=full --leak-resolution=med
 LIBS_FLAGS = -lcheck
 
-SRC_C_FILES = s21*/*.c
+SRC_C_FILES = s21_structs/*.c s21_calculate/*.c
+GUI_C_FILES = s21_gtk_gui/*.c
 TEST_C_FILES = tests/*.c
 
 TEST_TARGET  = s21_test
@@ -17,7 +18,7 @@ MAIN_TARGET = s21_main
 
 REPORT_DIR = report
 
-INCLUDES = .
+INCLUDES = . 
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
@@ -44,7 +45,7 @@ build_test: apply_clang $(SRC_C_FILES)
 	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_C_FILES) $(TEST_C_FILES) -o $(TEST_TARGET) $(LIBS_FLAGS)
 
 build: apply_clang $(SRC_C_FILES)
-	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_C_FILES) main.c -o $(MAIN_TARGET) $(LIBS_FLAGS) $(GTK_LIBS)
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(GUI_C_FILES) $(SRC_C_FILES) main.c -o $(MAIN_TARGET) $(LIBS_FLAGS) $(GTK_LIBS)
 	./$(MAIN_TARGET)
 
 gcov_report: apply_clang

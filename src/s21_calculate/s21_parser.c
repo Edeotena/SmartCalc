@@ -70,11 +70,11 @@ Token get_lex(const char* str, size_t* shift) {
 
 int parse_to_tokens(const char* str, queue** res) {
   *res = NULL;
-  int code = SUCCESS;
+  int code = str != NULL ? SUCCESS : FAILURE;
 
   Token previous = UNRECOGNIZED;
 
-  for (const char* str_cp = str; *str_cp != '\0' && code == SUCCESS;) {
+  for (const char* str_cp = str; code == SUCCESS && *str_cp != '\0';) {
     skip_spaces(&str_cp);
     size_t shift = 0;
     Token next = get_lex(str_cp, &shift);

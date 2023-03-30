@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "s21_gtk_gui.h"
 #include "s21_smart_calc.h"
 
@@ -50,7 +52,13 @@ void do_calculate(GtkWidget *window, struct multi_arg_t *data) {
       if (code == FAILURE) {
         sprintf(buffer, "RPN calculation error");
       } else {
-        sprintf(buffer, "result:\n%.7lf", res);
+        if (isnan(res)) {
+          sprintf(buffer, "result: NOT A NUMBER(probably root of negative)");
+        } else if (isinf(res)) {
+          sprintf(buffer, "result: INFINITY(probably zero-division)");
+        } else {
+          sprintf(buffer, "result: s%.7lf", res);
+        }
       }
       free_queue(&rpn);
     }

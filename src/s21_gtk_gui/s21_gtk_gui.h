@@ -11,7 +11,9 @@ struct multi_arg_t {
 
 void set_mw_markdown(GtkWidget **window, GtkWidget **grid,
                      GtkWidget **calc_field, GtkWidget **result,
-                     GtkWidget **calc_btn, GtkWidget **x_field);
+                     GtkWidget **calc_btn, GtkWidget **x_field,
+                     GtkWidget **st_field, GtkWidget **end_field,
+                     GtkWidget **steps_field);
 void set_mw_signals(GtkWidget **window, GtkWidget **calc_btn,
                     struct multi_arg_t *data);
 void do_calculate(GtkWidget *window, struct multi_arg_t *data);

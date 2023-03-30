@@ -1,9 +1,11 @@
-CC = gcc
+	CC = gcc
 DELETE = rm -rf
 
 VALGRIND_OUTPUT = valgrind.txt
 
 BUILD_FLAGS = -Wall -Wextra -Werror -std=c11 -pedantic -fanalyzer
+GTK_FLAGS = `pkg-config gtk+-3.0 --cflags`
+GTK_LIBS = `pkg-config gtk+-3.0 --libs`
 VALGRIND_FLAGS = --log-file="$(VALGRIND_OUTPUT)" --track-origins=yes --trace-children=yes --leak-check=full --leak-resolution=med
 LIBS_FLAGS = -lcheck
 
@@ -42,7 +44,7 @@ build_test: apply_clang $(SRC_C_FILES)
 	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_C_FILES) $(TEST_C_FILES) -o $(TEST_TARGET) $(LIBS_FLAGS)
 
 build: apply_clang $(SRC_C_FILES)
-	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_C_FILES) main.c -o $(MAIN_TARGET) $(LIBS_FLAGS)
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_C_FILES) main.c -o $(MAIN_TARGET) $(LIBS_FLAGS) $(GTK_LIBS)
 	./$(MAIN_TARGET)
 
 gcov_report: apply_clang

@@ -14,7 +14,7 @@ double *get_values(queue *func, double left, double right, int steps) {
   }
 
   for (int i = 0; i < steps && code == SUCCESS; ++i) {
-    double temp = calculate(func, x, &code);
+    double temp = calc_rpn(func, x, &code);
     if (code == SUCCESS) {
       res[i] = temp;
       x += step;

@@ -54,7 +54,7 @@ int produce_bin(stack **func, double fir, double sec, Token op) {
   return code;
 }
 
-double calculate(queue *func, double x, int *code_error) {
+double calc_rpn(queue *func, double x, int *code_error) {
   int code = SUCCESS;
   *code_error = SUCCESS;
   double value;

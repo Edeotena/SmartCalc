@@ -9,7 +9,7 @@ START_TEST(rpn_calc_1) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, 11, EPS);
@@ -28,7 +28,7 @@ START_TEST(rpn_calc_2) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, 12.5, EPS);
@@ -47,7 +47,7 @@ START_TEST(rpn_calc_3) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, sin(asin(1)), EPS);
@@ -66,7 +66,7 @@ START_TEST(rpn_calc_4) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, 1, EPS);
@@ -85,7 +85,7 @@ START_TEST(rpn_calc_5) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, log10(pow(10, 7)), EPS);
@@ -104,7 +104,7 @@ START_TEST(rpn_calc_6) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, cos(5), EPS);
@@ -123,7 +123,7 @@ START_TEST(rpn_calc_7) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, -3 * (+5), EPS);
@@ -142,7 +142,7 @@ START_TEST(rpn_calc_8) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, 1 + 2 - 3 * 4 / pow(5, 6), EPS);
@@ -161,7 +161,7 @@ START_TEST(rpn_calc_9) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, .5, EPS);
@@ -180,7 +180,7 @@ START_TEST(rpn_calc_10) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, 5 % 2, EPS);
@@ -199,7 +199,7 @@ START_TEST(rpn_calc_11) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, tan(sqrt(3) / 2), EPS);
@@ -218,7 +218,7 @@ START_TEST(rpn_calc_12) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, pow(5, 6), EPS);
@@ -237,7 +237,7 @@ START_TEST(rpn_calc_13) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, -3 + (-(3 - 5)) / 2, EPS);
@@ -256,7 +256,7 @@ START_TEST(rpn_calc_14) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, sin(acos(1. / 2)), EPS);
@@ -275,7 +275,7 @@ START_TEST(rpn_calc_15) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  double dres = calculate(rpn, 0, &code);
+  double dres = calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, SUCCESS);
 
   ck_assert_double_eq_tol(dres, log(100) / log(10), EPS);
@@ -294,7 +294,7 @@ START_TEST(wr_rpn_calc_1) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  calculate(rpn, 0, &code);
+  calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, FAILURE);
 
   free_queue(&res);
@@ -310,7 +310,7 @@ START_TEST(wr_rpn_calc_2) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  calculate(rpn, 0, &code);
+  calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, FAILURE);
 
   free_queue(&res);
@@ -326,7 +326,7 @@ START_TEST(wr_rpn_calc_3) {
   queue *rpn;
   rpn = make_rpn(res, &code);
   ck_assert_int_eq(code, SUCCESS);
-  calculate(rpn, 0, &code);
+  calc_rpn(rpn, 0, &code);
   ck_assert_int_eq(code, FAILURE);
 
   free_queue(&res);

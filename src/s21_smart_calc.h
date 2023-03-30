@@ -3,6 +3,9 @@
 
 #include <stdlib.h>
 
+#include "s21_calculate/s21_calculate.h"
+#include "s21_structs/s21_structs.h"
+
 #define SUCCESS 1
 #define FAILURE 0
 

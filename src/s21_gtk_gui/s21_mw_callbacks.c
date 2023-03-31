@@ -95,20 +95,17 @@ void do_build(GtkWidget *window, struct widgets_container *data) {
     return;
   }
 
-  long steps = 0;
-  int valid_steps = get_int_from_entry(data->steps_field, &steps);
-  double start = 0, end = 0;
-  int valid_start = get_double_from_entry(data->st_field, &start);
-  int valid_end = get_double_from_entry(data->end_field, &end);
-  double ystart = 0, yend = 0;
-  int yvalid_start = get_double_from_entry(data->yst_field, &ystart);
-  int yvalid_end = get_double_from_entry(data->yend_field, &yend);
+  long start = 0, end = 0;
+  int valid_start = get_int_from_entry(data->st_field, &start);
+  int valid_end = get_int_from_entry(data->end_field, &end);
+  long ystart = 0, yend = 0;
+  int yvalid_start = get_int_from_entry(data->yst_field, &ystart);
+  int yvalid_end = get_int_from_entry(data->yend_field, &yend);
 
   int code = SUCCESS;
 
-  if (valid_steps == FAILURE || valid_start == FAILURE ||
-      yvalid_end == FAILURE || yvalid_start == FAILURE ||
-      valid_end == FAILURE || end <= start || steps < 2) {
+  if (valid_start == FAILURE || yvalid_end == FAILURE ||
+      yvalid_start == FAILURE || valid_end == FAILURE || end <= start) {
     code = FAILURE;
   }
 
@@ -137,12 +134,15 @@ void do_build(GtkWidget *window, struct widgets_container *data) {
   }
 
   if (code == SUCCESS) {
+    char x[40], y[40];
+    sprintf(x, "set xrange [%ld: %ld]", start, end);
+    sprintf(y, "set yrange [%ld: %ld]", ystart, yend);
     char *commands_gnu_plot[] = {"set terminal png enhanced truecolor",
-                                 "set output \"tempfile.png\"", gnu_str};
+                                 "set output \"tempfile.png\"", x, y, gnu_str};
     FILE *gnu_plot = popen("gnuplot -persistent", "w");
     int i;
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < 5; i++) {
       fprintf(gnu_plot, "%s \n", commands_gnu_plot[i]);
     }
   }

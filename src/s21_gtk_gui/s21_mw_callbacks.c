@@ -95,6 +95,8 @@ void do_build(GtkWidget *window, struct widgets_container *data) {
     return;
   }
 
+  char buffer[20] = "function built\n";
+
   long start = 0, end = 0;
   int valid_start = get_int_from_entry(data->st_field, &start);
   int valid_end = get_int_from_entry(data->end_field, &end);
@@ -107,6 +109,7 @@ void do_build(GtkWidget *window, struct widgets_container *data) {
   if (valid_start == FAILURE || yvalid_end == FAILURE ||
       yvalid_start == FAILURE || valid_end == FAILURE || end <= start) {
     code = FAILURE;
+    sprintf(buffer, "Wrong params\n");
   }
 
   if (code == SUCCESS) {
@@ -117,8 +120,12 @@ void do_build(GtkWidget *window, struct widgets_container *data) {
       queue *rpn = make_rpn(parsed, &code);
       if (code == SUCCESS) {
         free_queue(&rpn);
+      } else {
+        sprintf(buffer, "RPN making error\n");
       }
       free_queue(&parsed);
+    } else {
+      sprintf(buffer, "Parser error\n");
     }
   }
 
@@ -147,7 +154,5 @@ void do_build(GtkWidget *window, struct widgets_container *data) {
     }
   }
 
-  if (code == FAILURE) {
-    gtk_label_set_text(GTK_LABEL(data->result), "Error\n");
-  }
+  gtk_label_set_text(GTK_LABEL(data->result), buffer);
 }

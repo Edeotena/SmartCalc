@@ -68,6 +68,7 @@ clean:
 	$(DELETE) *.o
 	$(DELETE) *.gc*
 	$(DELETE) $(VALGRIND_OUTPUT)
+	$(DELETE) tempfile.png
 
 valgrind: apply_clang build_test
 	valgrind $(VALGRIND_FLAGS) ./$(TEST_TARGET)

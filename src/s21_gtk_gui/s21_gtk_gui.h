@@ -9,6 +9,8 @@ struct widgets_container {
   GtkWidget *x_field;
   GtkWidget *st_field;
   GtkWidget *end_field;
+  GtkWidget *yst_field;
+  GtkWidget *yend_field;
   GtkWidget *steps_field;
 };
 
@@ -16,6 +18,7 @@ void set_mw_markdown(GtkWidget **window, GtkWidget **grid,
                      GtkWidget **calc_field, GtkWidget **result,
                      GtkWidget **calc_btn, GtkWidget **x_field,
                      GtkWidget **st_field, GtkWidget **end_field,
+                     GtkWidget **yst_field, GtkWidget **yend_field,
                      GtkWidget **steps_field, GtkWidget **build_button);
 void set_mw_signals(GtkWidget **window, GtkWidget **calc_btn,
                     GtkWidget **build_btn, struct widgets_container *data);

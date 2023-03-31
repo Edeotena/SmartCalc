@@ -3,6 +3,7 @@ void set_mw_markdown(GtkWidget **window, GtkWidget **grid,
                      GtkWidget **calc_field, GtkWidget **result,
                      GtkWidget **calc_btn, GtkWidget **x_field,
                      GtkWidget **st_field, GtkWidget **end_field,
+                     GtkWidget **yst_field, GtkWidget **yend_field,
                      GtkWidget **steps_field, GtkWidget **build_button) {
   *grid = gtk_grid_new();
   gtk_container_add(GTK_CONTAINER(*window), *grid);
@@ -24,22 +25,33 @@ void set_mw_markdown(GtkWidget **window, GtkWidget **grid,
   *x_field = gtk_entry_new();
   gtk_grid_attach(GTK_GRID(*grid), *x_field, 1, 2, 1, 2);
 
-  GtkWidget *st_label = gtk_label_new("From: ");
+  GtkWidget *st_label = gtk_label_new("From(x): ");
   gtk_grid_attach(GTK_GRID(*grid), st_label, 0, 6, 1, 2);
 
   *st_field = gtk_entry_new();
   gtk_grid_attach(GTK_GRID(*grid), *st_field, 1, 6, 1, 2);
 
-  GtkWidget *end_label = gtk_label_new("To: ");
+  GtkWidget *end_label = gtk_label_new("To(x): ");
   gtk_grid_attach(GTK_GRID(*grid), end_label, 0, 8, 1, 2);
   *end_field = gtk_entry_new();
   gtk_grid_attach(GTK_GRID(*grid), *end_field, 1, 8, 1, 2);
 
+  GtkWidget *yst_label = gtk_label_new("From(y): ");
+  gtk_grid_attach(GTK_GRID(*grid), yst_label, 0, 10, 1, 2);
+
+  *yst_field = gtk_entry_new();
+  gtk_grid_attach(GTK_GRID(*grid), *yst_field, 1, 10, 1, 2);
+
+  GtkWidget *yend_label = gtk_label_new("To(y): ");
+  gtk_grid_attach(GTK_GRID(*grid), yend_label, 0, 12, 1, 2);
+  *yend_field = gtk_entry_new();
+  gtk_grid_attach(GTK_GRID(*grid), *yend_field, 1, 12, 1, 2);
+
   GtkWidget *steps_label = gtk_label_new("Steps: ");
-  gtk_grid_attach(GTK_GRID(*grid), steps_label, 0, 10, 1, 2);
+  gtk_grid_attach(GTK_GRID(*grid), steps_label, 0, 14, 1, 2);
   *steps_field = gtk_entry_new();
-  gtk_grid_attach(GTK_GRID(*grid), *steps_field, 1, 10, 1, 2);
+  gtk_grid_attach(GTK_GRID(*grid), *steps_field, 1, 14, 1, 2);
 
   *build_button = gtk_button_new_with_label("Build");
-  gtk_grid_attach(GTK_GRID(*grid), *build_button, 0, 12, 3, 1);
+  gtk_grid_attach(GTK_GRID(*grid), *build_button, 0, 16, 3, 1);
 }

@@ -22,7 +22,7 @@ void set_mw_markdown(GtkWidget **window, GtkWidget **grid,
                      GtkWidget **build_button, GtkWidget **step_field);
 void set_mw_signals(GtkWidget **window, GtkWidget **calc_btn,
                     GtkWidget **build_btn, struct widgets_container *data);
-void do_calculate(GtkWidget *window, struct widgets_container *data);
-void do_build(GtkWidget *window, struct widgets_container *data);
+void do_calculate(const GtkWidget *window, struct widgets_container *data);
+void do_build(const GtkWidget *window, struct widgets_container *data);
 
 #endif  // SMARTCALC_S21_GTK_GUI_H

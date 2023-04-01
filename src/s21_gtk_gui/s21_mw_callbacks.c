@@ -48,7 +48,7 @@ int get_int_from_entry(GtkWidget *entry, int *res) {
   return valid;
 }
 
-void do_calculate(GtkWidget *window, struct widgets_container *data) {
+void do_calculate(const GtkWidget *window, struct widgets_container *data) {
   if (window == NULL) {
     return;
   }
@@ -62,7 +62,6 @@ void do_calculate(GtkWidget *window, struct widgets_container *data) {
       (char *)gtk_entry_get_text(GTK_ENTRY(data->calc_field)), &parsed);
   if (check_for_x(parsed) == SUCCESS && valid_x == FAILURE && code == SUCCESS) {
     sprintf(buffer, "Invalid X\n");
-    code = FAILURE;
   } else if (code == FAILURE) {
     sprintf(buffer, "Parser error\n");
   } else {
@@ -99,15 +98,23 @@ int create_points_file(struct widgets_container *data, char *buffer,
     queue *rpn = make_rpn(parsed, &code);
     if (code == SUCCESS) {
       double *values = get_values(rpn, start, end, steps);
-      double step = (end - start) / (steps - 1);
-      double x = start;
-      FILE *function = fopen("function.txt", "w");
-      for (int i = 0; i < steps; ++i) {
-        fprintf(function, "%lf %lf\n", x, values[i]);
-        x += step;
+      if (values != NULL) {
+        double step = (end - start) / (steps - 1);
+        double x = start;
+        FILE *function = fopen("function.txt", "w");
+        if (function != NULL) {
+          for (int i = 0; i < steps; ++i) {
+            fprintf(function, "%lf %lf\n", x, values[i]);
+            x += step;
+          }
+          fclose(function);
+        } else {
+          code = FAILURE;
+        }
+        free(values);
+      } else {
+        code = FAILURE;
       }
-      fclose(function);
-      free(values);
       free_queue(&rpn);
     } else {
       sprintf(buffer, "RPN making error\n");
@@ -120,8 +127,9 @@ int create_points_file(struct widgets_container *data, char *buffer,
   return code;
 }
 
-void create_function_image(struct widgets_container *data, double y_end,
-                           double y_start, double x_end, double x_start) {
+int create_function_image(struct widgets_container *data, double y_end,
+                          double y_start, double x_end, double x_start) {
+  int code = SUCCESS;
   char x[40], y[40], plot[70];
   sprintf(x, "set xrange [%s: %s]",
           gtk_entry_get_text(GTK_ENTRY(data->st_field)),
@@ -131,22 +139,27 @@ void create_function_image(struct widgets_container *data, double y_end,
           gtk_entry_get_text(GTK_ENTRY(data->yend_field)));
   sprintf(plot, "plot \"function.txt\" title \"scaling: %lf\" ps 0.5",
           (y_end - y_start) / (x_end - x_start));
-  char *commands_gnu_plot[] = {"set terminal png enhanced truecolor",
-                               "set output \"function.png\"",
-                               "set decimalsign locale",
-                               "set xlabel \"x\"",
-                               "set ylabel \"y\"",
-                               x,
-                               y,
-                               plot,
-                               "set out"};
   FILE *gnu_plot = popen("gnuplot -persistent", "w");
-  int i;
+  if (gnu_plot != NULL) {
+    char *commands_gnu_plot[] = {"set terminal png enhanced truecolor",
+                                 "set output \"function.png\"",
+                                 "set decimalsign locale",
+                                 "set xlabel \"x\"",
+                                 "set ylabel \"y\"",
+                                 x,
+                                 y,
+                                 plot,
+                                 "set out"};
+    int i;
 
-  for (i = 0; i < 9; i++) {
-    fprintf(gnu_plot, "%s \n", commands_gnu_plot[i]);
+    for (i = 0; i < 9; i++) {
+      fprintf(gnu_plot, "%s \n", commands_gnu_plot[i]);
+    }
+    pclose(gnu_plot);
+  } else {
+    code = FAILURE;
   }
-  pclose(gnu_plot);
+  return code;
 }
 
 void build_image_window() {
@@ -162,7 +175,7 @@ void build_image_window() {
   }
 }
 
-void do_build(GtkWidget *window, struct widgets_container *data) {
+void do_build(const GtkWidget *window, struct widgets_container *data) {
   if (window == NULL) {
     return;
   }
@@ -192,7 +205,10 @@ void do_build(GtkWidget *window, struct widgets_container *data) {
   }
 
   if (code == SUCCESS) {
-    create_function_image(data, y_end, y_start, x_end, x_start);
+    code = create_function_image(data, y_end, y_start, x_end, x_start);
+  }
+
+  if (code == SUCCESS) {
     build_image_window();
   }
 

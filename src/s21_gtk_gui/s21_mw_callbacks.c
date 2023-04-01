@@ -101,7 +101,7 @@ int create_points_file(struct widgets_container *data, char *buffer,
       if (values != NULL) {
         double step = (end - start) / (steps - 1);
         double x = start;
-        FILE *function = fopen("function.txt", "w");
+        FILE *function = fopen("function.txt~", "w");
         if (function != NULL) {
           for (int i = 0; i < steps; ++i) {
             fprintf(function, "%lf %lf\n", x, values[i]);
@@ -137,12 +137,12 @@ int create_function_image(struct widgets_container *data, double y_end,
   sprintf(y, "set yrange [%s: %s]",
           gtk_entry_get_text(GTK_ENTRY(data->yst_field)),
           gtk_entry_get_text(GTK_ENTRY(data->yend_field)));
-  sprintf(plot, "plot \"function.txt\" title \"scaling: %lf\" ps 0.5",
+  sprintf(plot, "plot \"function.txt~\" title \"scaling: %lf\" ps 0.5",
           (y_end - y_start) / (x_end - x_start));
   FILE *gnu_plot = popen("gnuplot -persistent", "w");
   if (gnu_plot != NULL) {
     char *commands_gnu_plot[] = {"set terminal png enhanced truecolor",
-                                 "set output \"function.png\"",
+                                 "set output \"function.png~\"",
                                  "set decimalsign locale",
                                  "set xlabel \"x\"",
                                  "set ylabel \"y\"",
@@ -163,7 +163,7 @@ int create_function_image(struct widgets_container *data, double y_end,
 }
 
 void build_image_window() {
-  GtkWidget *pic = gtk_image_new_from_file("function.png");
+  GtkWidget *pic = gtk_image_new_from_file("function.png~");
   if (pic != NULL) {
     GtkWidget *func_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     GtkWidget *grid = gtk_grid_new();

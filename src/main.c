@@ -4,6 +4,8 @@ int main(int argc, char **argv) {
   GtkWidget *main_window, *grid, *calc_btn, *calc_field, *result, *x_field,
       *st_field, *end_field, *yst_field, *yend_field, *build_button,
       *step_field;
+  struct widgets_container data;
+
   gtk_init(&argc, &argv);
 
   main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -11,7 +13,6 @@ int main(int argc, char **argv) {
   set_mw_markdown(&main_window, &grid, &calc_field, &result, &calc_btn,
                   &x_field, &st_field, &end_field, &yst_field, &yend_field,
                   &build_button, &step_field);
-  struct widgets_container data;
   data.calc_field = calc_field;
   data.result = result;
   data.x_field = x_field;

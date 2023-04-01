@@ -4,7 +4,7 @@ void set_mw_markdown(GtkWidget **window, GtkWidget **grid,
                      GtkWidget **calc_btn, GtkWidget **x_field,
                      GtkWidget **st_field, GtkWidget **end_field,
                      GtkWidget **yst_field, GtkWidget **yend_field,
-                     GtkWidget **build_button) {
+                     GtkWidget **build_button, GtkWidget **step_field) {
   *grid = gtk_grid_new();
   gtk_container_add(GTK_CONTAINER(*window), *grid);
 
@@ -47,6 +47,11 @@ void set_mw_markdown(GtkWidget **window, GtkWidget **grid,
   *yend_field = gtk_entry_new();
   gtk_grid_attach(GTK_GRID(*grid), *yend_field, 1, 12, 1, 2);
 
+  GtkWidget *steps_label = gtk_label_new("Points count: ");
+  gtk_grid_attach(GTK_GRID(*grid), steps_label, 0, 14, 1, 2);
+  *step_field = gtk_entry_new();
+  gtk_grid_attach(GTK_GRID(*grid), *step_field, 1, 14, 1, 2);
+
   *build_button = gtk_button_new_with_label("Build");
-  gtk_grid_attach(GTK_GRID(*grid), *build_button, 0, 14, 3, 1);
+  gtk_grid_attach(GTK_GRID(*grid), *build_button, 0, 16, 3, 1);
 }

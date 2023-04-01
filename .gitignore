@@ -6,6 +6,7 @@ s21_test
 report
 valgrind.txt
 function.png
+function.txt
 
 # Prerequisites
 *.d

@@ -37,7 +37,7 @@ add_executable(Test
         src/tests/s21_tests.h
         src/tests/test_s21_parses.c
         src/tests/test_main.c
-        src/tests/test_s21_rpn_calc.c)
+        src/tests/test_s21_rpn_calc.c src/tests/test_s21_draw.c)
 
 target_link_libraries(SmartCalc ${GTK3_LIBRARIES} check subunit m)
 add_definitions(${GTK3_CFLAGS_OTHER})

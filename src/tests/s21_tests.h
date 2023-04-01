@@ -10,5 +10,6 @@
 
 Suite *parser_suite();
 Suite *rpn_calc_suite();
+Suite *draw_suite();
 
 #endif  // SMARTCALC_S21_TESTS_H

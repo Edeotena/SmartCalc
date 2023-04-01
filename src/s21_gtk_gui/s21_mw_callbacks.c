@@ -95,7 +95,7 @@ void do_build(GtkWidget *window, struct widgets_container *data) {
     return;
   }
 
-  char buffer[20] = "function built\n";
+  char buffer[25] = "function built\n";
 
   long start = 0, end = 0;
   int valid_start = get_int_from_entry(data->st_field, &start);
@@ -145,12 +145,30 @@ void do_build(GtkWidget *window, struct widgets_container *data) {
     sprintf(x, "set xrange [%ld: %ld]", start, end);
     sprintf(y, "set yrange [%ld: %ld]", ystart, yend);
     char *commands_gnu_plot[] = {"set terminal png enhanced truecolor",
-                                 "set output \"tempfile.png\"", x, y, gnu_str};
+                                 "set output \"function.png\"",
+                                 x,
+                                 y,
+                                 gnu_str,
+                                 "set out"};
     FILE *gnu_plot = popen("gnuplot -persistent", "w");
     int i;
 
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 6; i++) {
       fprintf(gnu_plot, "%s \n", commands_gnu_plot[i]);
+    }
+    pclose(gnu_plot);
+  }
+
+  if (code == SUCCESS) {
+    GtkWidget *pic = gtk_image_new_from_file("function.png");
+    if (pic != NULL) {
+      GtkWidget *func_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+      GtkWidget *grid = gtk_grid_new();
+      gtk_container_add(GTK_CONTAINER(func_window), grid);
+
+      gtk_grid_attach(GTK_GRID(grid), pic, 0, 0, 1, 2);
+
+      gtk_widget_show_all(func_window);
     }
   }
 

@@ -17,7 +17,7 @@ add_executable(SmartCalc
         src/main.c
         src/s21_structs/s21_stack.c
         src/s21_calculate/s21_make_rpn.c
-        src/s21_calculate/s21_calc_rpn.c src/s21_calculate/s21_draw.c src/s21_gtk_gui/s21_mw_markdown.c src/s21_gtk_gui/s21_gtk_gui.h src/s21_gtk_gui/s21_mw_signals.c src/s21_gtk_gui/s21_mw_callbacks.c)
+        src/s21_calculate/s21_calc_rpn.c src/s21_gtk_gui/s21_mw_markdown.c src/s21_gtk_gui/s21_gtk_gui.h src/s21_gtk_gui/s21_mw_signals.c src/s21_gtk_gui/s21_mw_callbacks.c)
 
 add_executable(Test
         src/s21_calculate/s21_calculate.h
@@ -30,7 +30,7 @@ add_executable(Test
         src/tests/test_s21_rpn_calc.c
         src/s21_structs/s21_stack.c
         src/s21_calculate/s21_make_rpn.c
-        src/s21_calculate/s21_calc_rpn.c src/s21_calculate/s21_draw.c)
+        src/s21_calculate/s21_calc_rpn.c)
 
 target_link_libraries(SmartCalc ${GTK3_LIBRARIES} check subunit m)
 add_definitions(${GTK3_CFLAGS_OTHER})

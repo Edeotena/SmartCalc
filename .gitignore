@@ -1,11 +1,12 @@
 .idea
 cmake-build-debug
-s21_main
+smart_calc
 s21_test
 *.gc*
 report
 valgrind.txt
 function.*
+build/
 
 # Prerequisites
 *.d

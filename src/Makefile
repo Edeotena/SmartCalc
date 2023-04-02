@@ -1,4 +1,4 @@
-	CC = gcc
+CC = gcc
 DELETE = rm -rf
 
 VALGRIND_OUTPUT = valgrind.txt
@@ -14,11 +14,13 @@ GUI_C_FILES = s21_gtk_gui/*.c
 TEST_C_FILES = tests/*.c
 
 TEST_TARGET  = s21_test
-MAIN_TARGET = s21_main
+EXECUTABLE = smart_calc
 
 REPORT_DIR = report
 
 INCLUDES = . 
+
+BUILD_DIR = ../build/
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
@@ -29,7 +31,7 @@ endif
 #	something for MACOS
 #endif
 
-all: clean test gcov_report $(LIB)
+all: clean test build gcov_report $(LIB)
 
 apply_clang: 
 	cp ../materials/linters/.clang-format .
@@ -45,8 +47,10 @@ build_test: apply_clang $(SRC_C_FILES)
 	$(CC) $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_C_FILES) $(TEST_C_FILES) -o $(TEST_TARGET) $(LIBS_FLAGS)
 
 build: apply_clang $(SRC_C_FILES)
-	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(GUI_C_FILES) $(SRC_C_FILES) main.c -o $(MAIN_TARGET) $(LIBS_FLAGS) $(GTK_LIBS)
-	./$(MAIN_TARGET)
+	$(CC) $(BUILD_FLAGS) $(GTK_FLAGS) $(addprefix -I , $(INCLUDES)) $(GUI_C_FILES) $(SRC_C_FILES) main.c -o $(EXECUTABLE) $(LIBS_FLAGS) $(GTK_LIBS)
+
+run: build
+	./$(EXECUTABLE)
 
 gcov_report: apply_clang
 	$(CC) --coverage $(BUILD_FLAGS) $(addprefix -I , $(INCLUDES)) $(SRC_C_FILES) $(TEST_C_FILES) -o $(TEST_TARGET) $(LIBS_FLAGS)
@@ -59,9 +63,16 @@ gcov_report: apply_clang
 cppcheck:
 	cppcheck --enable=all --suppress=missingIncludeSystem .
 
+uninstall:
+	$(DELETE) $(BUILD_DIR)
+
+install: uninstall build
+	mkdir $(BUILD_DIR)
+	cp $(EXECUTABLE) $(BUILD_DIR)
+
 clean:
 	$(DELETE) $(TEST_TARGET)
-	$(DELETE) $(MAIN_TARGET)
+	$(DELETE) $(EXECUTABLE)
 	$(DELETE) $(REPORT_DIR)
 	$(DELETE) *.info
 	$(DELETE) $(LIB)

@@ -80,9 +80,10 @@ clean:
 	$(DELETE) *.gc*
 	$(DELETE) $(VALGRIND_OUTPUT)
 	$(DELETE) function.*
-	$(DELETE) *.aux
-	$(DELETE) *.log
-	$(DELETE) *.dvi
+	$(DELETE) docs.aux
+	$(DELETE) docs.log
+	$(DELETE) docs.dvi
+	$(DELETE) exec.tgz
 
 valgrind: apply_clang build_test
 	valgrind $(VALGRIND_FLAGS) ./$(TEST_TARGET)
@@ -92,3 +93,6 @@ valgrind: apply_clang build_test
 dvi:
 	texi2dvi docs.tex
 	open docs.dvi
+
+dist: build
+	tar -czvf exec.tgz $(EXECUTABLE)

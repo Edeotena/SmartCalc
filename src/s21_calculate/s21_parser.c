@@ -73,9 +73,9 @@ int parse_to_tokens(char* str, queue** res) {
   int code = str != NULL ? SUCCESS : FAILURE;
 
   for (int i = 0; str[i] != '\0'; ++i) {
-      if (str[i] == '.') {
-          str[i] = ',';
-      }
+    if (str[i] == '.') {
+      str[i] = ',';
+    }
   }
 
   Token previous = UNRECOGNIZED;

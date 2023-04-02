@@ -166,6 +166,7 @@ void build_image_window() {
   GtkWidget *pic = gtk_image_new_from_file("function.png~");
   if (pic != NULL) {
     GtkWidget *func_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(func_window), "Function graph");
     GtkWidget *grid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(func_window), grid);
 

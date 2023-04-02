@@ -17,32 +17,49 @@ int check_for_x(queue *tokens) {
 }
 
 int get_double_from_entry(GtkWidget *entry, double *res) {
-  int valid = SUCCESS;
-  char *val_str = (char *)gtk_entry_get_text(GTK_ENTRY(entry));
-  if (*val_str != '\0') {
-    char *end;
-    *res = strtod(val_str, &end);
-    if (*end != '\0') {
+  int valid = strlen((char *)gtk_entry_get_text(GTK_ENTRY(entry))) <= 10
+                  ? SUCCESS
+                  : FAILURE;
+  char *val_str = calloc(15, sizeof(char));
+  if (val_str != NULL && valid == SUCCESS) {
+    strcpy(val_str, (char *)gtk_entry_get_text(GTK_ENTRY(entry)));
+    for (int i = 0; val_str[i] != '\0'; ++i) {
+      if (val_str[i] == '.') {
+        val_str[i] = ',';
+      }
+    }
+    if (*val_str != '\0') {
+      char *end;
+      *res = strtod(val_str, &end);
+      if (*end != '\0') {
+        valid = FAILURE;
+      }
+    } else {
       valid = FAILURE;
     }
   } else {
     valid = FAILURE;
   }
+  free(val_str);
 
   return valid;
 }
 
 int get_int_from_entry(GtkWidget *entry, int *res) {
-  int valid = SUCCESS;
-  char *val_str = (char *)gtk_entry_get_text(GTK_ENTRY(entry));
-  if (*val_str != '\0') {
-    char *end;
-    *res = (int)strtol(val_str, &end, 10);
-    if (*end != '\0') {
+  int valid = strlen((char *)gtk_entry_get_text(GTK_ENTRY(entry))) <= 10
+                  ? SUCCESS
+                  : FAILURE;
+  if (valid == SUCCESS) {
+    char *val_str = (char *)gtk_entry_get_text(GTK_ENTRY(entry));
+    if (*val_str != '\0') {
+      char *end;
+      *res = (int)strtol(val_str, &end, 10);
+      if (*end != '\0') {
+        valid = FAILURE;
+      }
+    } else {
       valid = FAILURE;
     }
-  } else {
-    valid = FAILURE;
   }
 
   return valid;
@@ -89,8 +106,8 @@ void do_calculate(const GtkWidget *window, struct widgets_container *data) {
   gtk_label_set_text(GTK_LABEL(data->result), buffer);
 }
 
-int create_points_file(struct widgets_container *data, char *buffer,
-                       double start, double end, int steps) {
+int create_points_file(struct widgets_container *data, char *buffer, int start,
+                       int end, int steps) {
   queue *parsed;
   int code = parse_to_tokens(
       (char *)gtk_entry_get_text(GTK_ENTRY(data->calc_field)), &parsed);
@@ -99,8 +116,8 @@ int create_points_file(struct widgets_container *data, char *buffer,
     if (code == SUCCESS) {
       double *values = get_values(rpn, start, end, steps);
       if (values != NULL) {
-        double step = (end - start) / (steps - 1);
-        double x = start;
+        double step = (double)(end - start) / (steps - 1);
+        double x = (double)start;
         FILE *function = fopen("function.txt~", "w");
         if (function != NULL) {
           for (int i = 0; i < steps; ++i) {
@@ -127,8 +144,7 @@ int create_points_file(struct widgets_container *data, char *buffer,
   return code;
 }
 
-int create_function_image(struct widgets_container *data, double y_end,
-                          double y_start, double x_end, double x_start) {
+int create_function_image(struct widgets_container *data, double scale) {
   int code = SUCCESS;
   char x[40], y[40], plot[70];
   sprintf(x, "set xrange [%s: %s]",
@@ -137,8 +153,7 @@ int create_function_image(struct widgets_container *data, double y_end,
   sprintf(y, "set yrange [%s: %s]",
           gtk_entry_get_text(GTK_ENTRY(data->yst_field)),
           gtk_entry_get_text(GTK_ENTRY(data->yend_field)));
-  sprintf(plot, "plot \"function.txt~\" title \"scaling: %lf\" ps 0.5",
-          (y_end - y_start) / (x_end - x_start));
+  sprintf(plot, "plot \"function.txt~\" title \"scaling: %lf\" ps 0.5", scale);
   FILE *gnu_plot = popen("gnuplot -persistent", "w");
   if (gnu_plot != NULL) {
     char *commands_gnu_plot[] = {"set terminal png enhanced truecolor",
@@ -183,12 +198,12 @@ void do_build(const GtkWidget *window, struct widgets_container *data) {
 
   char buffer[25] = "function built\n";
 
-  double x_start = 0, x_end = 0;
-  int valid_start = get_double_from_entry(data->st_field, &x_start);
-  int valid_end = get_double_from_entry(data->end_field, &x_end);
-  double y_start = 0, y_end = 0;
-  int yvalid_start = get_double_from_entry(data->yst_field, &y_start);
-  int yvalid_end = get_double_from_entry(data->yend_field, &y_end);
+  int x_start = 0, x_end = 0;
+  int valid_start = get_int_from_entry(data->st_field, &x_start);
+  int valid_end = get_int_from_entry(data->end_field, &x_end);
+  int y_start = 0, y_end = 0;
+  int yvalid_start = get_int_from_entry(data->yst_field, &y_start);
+  int yvalid_end = get_int_from_entry(data->yend_field, &y_end);
   int steps;
   int valid_steps = get_int_from_entry(data->steps_field, &steps);
 
@@ -206,7 +221,8 @@ void do_build(const GtkWidget *window, struct widgets_container *data) {
   }
 
   if (code == SUCCESS) {
-    code = create_function_image(data, y_end, y_start, x_end, x_start);
+    code = create_function_image(data,
+                                 (double)(y_end - y_start) / (x_end - x_start));
   }
 
   if (code == SUCCESS) {

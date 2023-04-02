@@ -6,6 +6,6 @@
 int parse_to_tokens(char *str_to_parse, queue **res);
 queue *make_rpn(queue *queue_to_rpn, int *code);
 double calc_rpn(queue *func, double x, int *code_error);
-double *get_values(queue *func, double left, double right, int steps);
+double *get_values(queue *func, int left, int right, int steps);
 
 #endif  // SMARTCALC_S21_CALCULATE_H

@@ -4,9 +4,9 @@
 #include "s21_smart_calc.h"
 #include "s21_structs/s21_structs.h"
 
-double *get_values(queue *func, double left, double right, int steps) {
-  double step = (right - left) / (steps - 1);
-  double x = left;
+double *get_values(queue *func, int left, int right, int steps) {
+  double step = (double)(right - left) / (steps - 1);
+  double x = (double)left;
   double *res = (double *)calloc(steps, sizeof(double));
   int code = SUCCESS;
   if (res == NULL) {

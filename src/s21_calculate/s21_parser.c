@@ -2,7 +2,7 @@
 #include "s21_smart_calc.h"
 #include "s21_structs/s21_structs.h"
 
-void skip_spaces(const char** str) {
+void skip_spaces(char** str) {
   while (**str == ' ') {
     ++(*str);
   }
@@ -68,13 +68,19 @@ Token get_lex(const char* str, size_t* shift) {
   return res;
 }
 
-int parse_to_tokens(const char* str, queue** res) {
+int parse_to_tokens(char* str, queue** res) {
   *res = NULL;
   int code = str != NULL ? SUCCESS : FAILURE;
 
+  for (int i = 0; str[i] != '\0'; ++i) {
+      if (str[i] == '.') {
+          str[i] = ',';
+      }
+  }
+
   Token previous = UNRECOGNIZED;
 
-  for (const char* str_cp = str; code == SUCCESS && *str_cp != '\0';) {
+  for (char* str_cp = str; code == SUCCESS && *str_cp != '\0';) {
     skip_spaces(&str_cp);
     size_t shift = 0;
     Token next = get_lex(str_cp, &shift);

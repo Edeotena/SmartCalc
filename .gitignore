@@ -7,6 +7,9 @@ report
 valgrind.txt
 function.*
 build/
+*.dvi
+*.log
+*.aux
 
 # Prerequisites
 *.d

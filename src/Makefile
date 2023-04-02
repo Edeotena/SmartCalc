@@ -80,8 +80,15 @@ clean:
 	$(DELETE) *.gc*
 	$(DELETE) $(VALGRIND_OUTPUT)
 	$(DELETE) function.*
+	$(DELETE) *.aux
+	$(DELETE) *.log
+	$(DELETE) *.dvi
 
 valgrind: apply_clang build_test
 	valgrind $(VALGRIND_FLAGS) ./$(TEST_TARGET)
 	grep --color=always -n "ERROR SUMMARY" $(VALGRIND_OUTPUT) | grep -v "0 errors from 0 contexts" || true
 	grep --color=always -n "definitely lost:" $(VALGRIND_OUTPUT) | grep -v "0 bytes in 0 blocks" || true
+
+dvi:
+	texi2dvi docs.tex
+	open docs.dvi

@@ -10,6 +10,7 @@ build/
 *.dvi
 *.log
 *.aux
+*.tgz
 
 # Prerequisites
 *.d

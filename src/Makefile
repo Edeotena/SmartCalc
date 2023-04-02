@@ -83,7 +83,7 @@ clean:
 	$(DELETE) docs.aux
 	$(DELETE) docs.log
 	$(DELETE) docs.dvi
-	$(DELETE) exec.tgz
+	$(DELETE) $(EXECUTABLE).tgz
 
 valgrind: apply_clang build_test
 	valgrind $(VALGRIND_FLAGS) ./$(TEST_TARGET)
@@ -95,4 +95,4 @@ dvi:
 	open docs.dvi
 
 dist: build
-	tar -czvf exec.tgz $(EXECUTABLE)
+	tar -czvf $(EXECUTABLE).tgz $(EXECUTABLE)

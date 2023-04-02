@@ -31,7 +31,7 @@ endif
 #	something for MACOS
 #endif
 
-all: clean test build gcov_report $(LIB)
+all: clean test build gcov_report dvi dist
 
 apply_clang: 
 	cp ../materials/linters/.clang-format .
@@ -75,7 +75,6 @@ clean:
 	$(DELETE) $(EXECUTABLE)
 	$(DELETE) $(REPORT_DIR)
 	$(DELETE) *.info
-	$(DELETE) $(LIB)
 	$(DELETE) *.o
 	$(DELETE) *.gc*
 	$(DELETE) $(VALGRIND_OUTPUT)

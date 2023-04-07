@@ -38,12 +38,12 @@
 (Стоит отметить, что интерфейс программы довольно скромный по той причине, что приоритет ставился на функционал)
 - Вычисление выражения:
 
-![calc_expression](pics/calc_expression)
+![calc_expression](pics/calc_expression.png)
 
 - Вычисление выражения с подстановкой x:
 
-![expression_with_x](pics/expression_with_x)
+![expression_with_x](pics/expression_with_x.png)
 
 - Построение графика функции:
 
-![plot_example](pics/plot_example)
+![plot_example](pics/plot_example.png)
